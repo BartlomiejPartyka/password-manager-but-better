@@ -66,7 +66,22 @@ def save_entry():
             password_i.delete(0, END)
 
 
+# ---------------------------- FIND PASSWORD -------------------------- #
 
+def find_password():
+    website = website_i.get()
+    try:
+        with open('data.json', 'r') as data_file:
+            # reading data
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showerror('Database is empty', 'You have no saved passwords. Add passwords first.')
+    else:
+        if website in data:
+            messagebox.showinfo('Password found', f'Website: {website}\nEmail: {data[website]["email"]}\n'
+                                              f'Password: {data[website]["password"]}')
+        else:
+            messagebox.showinfo(f'Unknown website: {website}', f'No details for {website} exist.')
 # ---------------------------- UI SETUP ------------------------------- #
 
 
@@ -88,21 +103,24 @@ email_l.grid(row=2, column=0)
 password_l = Label(text='Password:')
 password_l.grid(row=3, column=0)
 
-website_i = Entry(width=45)
-website_i.grid(row=1, column=1, columnspan=2)
+website_i = Entry(width=27)
+website_i.grid(row=1, column=1)
 website_i.focus()
 
-email_i = Entry(width=45)
+email_i = Entry(width=46)
 email_i.grid(row=2, column=1, columnspan=2)
 email_i.insert(0, 'partyka.bartlomiej3000@gmail.com')
 
 password_i = Entry(width=27)
 password_i.grid(row=3, column=1)
 
-genpass_btn = Button(text='Generate Password', command=generate_password)
+genpass_btn = Button(text='Generate Password', width=15, command=generate_password)
 genpass_btn.grid(row=3, column=2)
 
-save_btn = Button(text='Save Password', width=38, command=save_entry)
+save_btn = Button(text='Save Password', width=39, command=save_entry)
 save_btn.grid(row=4, column=1, columnspan=2)
+
+search_btn = Button(text='Search', width=15, command=find_password)
+search_btn.grid(row=1, column=2)
 
 window.mainloop()
